@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>V-Cover-Art-dev.png</file>
+    </qresource>
+</RCC>
