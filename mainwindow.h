@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "controls.h"
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,5 +30,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QMediaPlayer *player;
+    QAudioOutput *audioOutput;
 };
 #endif // MAINWINDOW_H

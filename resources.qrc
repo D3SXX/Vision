@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>V-Cover-Art-dev.png</file>
+        <file>Vision.mp3</file>
     </qresource>
 </RCC>
