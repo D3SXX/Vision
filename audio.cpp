@@ -7,13 +7,14 @@ void Audio::init(){
     player = new QMediaPlayer;
     audioOutput = new QAudioOutput;
     player->setAudioOutput(audioOutput);
+    QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
+    QObject::connect(player, &QMediaPlayer::positionChanged, this, &Audio::updatePosition);
 }
 void Audio::start(){
     player->setSource(QUrl::fromLocalFile(this->audioPath));
     qDebug ()<< this->audioPath;
     audioOutput->setVolume(0.5);
     player->play();
-    QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
 }
 void Audio::pause(){
     player->pause();
@@ -39,6 +40,7 @@ void Audio::getMediaInfo(){
     }
     QImage image = variant.value<QImage>();
     this->cover = image;
+    this->duration = player->duration();
     qDebug() << "Title:" << this->title;
     qDebug() << "Author:" << this->author;
     qDebug() << "Album:" << this->album;
@@ -52,4 +54,8 @@ void Audio::setAudioPath(QString path){
 void Audio::setVolumeLevel(float volume){
     audioOutput->setVolume(volume);
     qDebug()<<volume;
+}
+void Audio::updatePosition(){
+    this->position = player->position();
+    emit positionChanged();
 }

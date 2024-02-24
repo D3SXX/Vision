@@ -23,8 +23,6 @@ private slots:
 
     void on_PlayPauseButton_clicked();
 
-
-
     void on_widget_4_windowIconChanged(const QIcon &icon);
 
     void on_widget_4_windowIconTextChanged(const QString &iconText);
@@ -38,6 +36,8 @@ private slots:
     void on_horizontalScrollBar_actionTriggered(int action);
 
     void on_horizontalScrollBar_valueChanged(int value);
+
+    void updatePosition();
 
 private:
     Ui::MainWindow *ui;

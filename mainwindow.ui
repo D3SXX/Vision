@@ -131,8 +131,23 @@
        <height>120</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar{
+border: 1px solid black;
+	background-color:transparent;
+}
+QProgressBar::chunk {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgb(208, 208, 208))
+}</string>
+     </property>
+     <property name="maximum">
+      <number>0</number>
+     </property>
      <property name="value">
-      <number>24</number>
+      <number>0</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -361,6 +376,22 @@
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="mediaPositionLabel">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>570</y>
+       <width>181</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>
