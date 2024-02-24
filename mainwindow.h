@@ -3,8 +3,7 @@
 
 #include <QMainWindow>
 #include "controls.h"
-#include <QMediaPlayer>
-#include <QAudioOutput>
+#include "audio.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,10 +18,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+    void updateData();
 private slots:
 
     void on_PlayPauseButton_clicked();
+
+
 
     void on_widget_4_windowIconChanged(const QIcon &icon);
 
@@ -30,7 +31,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QMediaPlayer *player;
-    QAudioOutput *audioOutput;
+
 };
 #endif // MAINWINDOW_H

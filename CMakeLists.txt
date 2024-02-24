@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         controls.h controls.cpp
+        audio.h audio.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET V APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -5,6 +5,7 @@
 #include <QMediaFormat>
 
 Controls control;
+Audio audio;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QPixmap cover(":/V-Cover-Art-dev.png"); // Setting up image file that will be used as cover art
     ui->labelCover->setPixmap(cover.scaled(400,400,Qt::KeepAspectRatio)); // Putting it into label
+    audio.init();
+    QObject::connect(&audio, &Audio::mediaInfoChanged, this, &MainWindow::updateData);
 }
 
 MainWindow::~MainWindow()
@@ -25,17 +28,19 @@ void MainWindow::on_PlayPauseButton_clicked()
     control.onPlay = !control.onPlay;
     if(control.onPlay){
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
-        player = new QMediaPlayer; // Only for testing, replace it in apropriate place later!
-        audioOutput = new QAudioOutput;
-        player->setAudioOutput(audioOutput);
-        player->setSource(QUrl("qrc:/Vision.mp3"));
-        audioOutput->setVolume(50);
-        player->play();
+        audio.start();
+
     }else {
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-start"));
-        player->pause();
+        audio.pause();
     }
     qDebug() << "Play is set to" << (control.onPlay ? "True (Playing)" : "False (Not playing)");
+}
+
+void MainWindow::updateData(){
+    ui->TitleLabel->setText(audio.title);
+    ui->ArtistLabel->setText(audio.author);
+    ui->AlbumTitleLabel->setText(audio.album);
 }
 
 
