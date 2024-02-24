@@ -20,10 +20,15 @@ public:
     QString album;
     QImage cover;
 
+    qint64 duration;
+    qint64 position;
+
 public slots:
     void getMediaInfo();
+    void updatePosition();
 signals:
     void mediaInfoChanged();
+    void positionChanged();
 private:
 
     QMediaPlayer *player;

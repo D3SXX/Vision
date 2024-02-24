@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->labelCover->setPixmap(cover.scaled(400,400,Qt::KeepAspectRatio)); // Putting it into label
     audio.init();
     QObject::connect(&audio, &Audio::mediaInfoChanged, this, &MainWindow::updateData);
+    QObject::connect(&audio, &Audio::positionChanged, this, &MainWindow::updatePosition);
 }
 
 MainWindow::~MainWindow()
@@ -41,10 +42,21 @@ void MainWindow::updateData(){
     ui->TitleLabel->setText(audio.title);
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
-    ui->labelCover->setPixmap(audio.cover.size().isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
-    qDebug() << audio.cover.isNull();
+    ui->labelCover->setPixmap(audio.cover.isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
 }
 
+void  MainWindow::updatePosition(){
+    ui->progressBar->setMaximum(audio.duration);
+    ui->progressBar->setValue(audio.position);
+    QString position =  QString("%1:%2:%3/%4:%5:%6")
+                           .arg((audio.position / (1000*60*60)) % 24, 2, 10, QChar('0'))
+                           .arg((audio.position / (1000 * 60)) % 60, 2, 10, QChar('0'))
+                           .arg((audio.position / 1000) % 60, 2, 10, QChar('0'))
+                           .arg((audio.duration / (1000*60*60)) % 24, 2, 10, QChar('0'))
+                           .arg((audio.duration / (1000 * 60)) % 60, 2, 10, QChar('0'))
+                           .arg((audio.duration / 1000) % 60, 2, 10, QChar('0'));
+    ui->mediaPositionLabel->setText(position);
+}
 
 void MainWindow::on_widget_4_windowIconTextChanged(const QString &iconText)
 {
