@@ -29,6 +29,16 @@ private slots:
 
     void on_widget_4_windowIconTextChanged(const QString &iconText);
 
+    void on_comboBox_activated(int index);
+
+    void on_horizontalSlider_actionTriggered(int action);
+
+    void on_horizontalSlider_rangeChanged(int min, int max);
+
+    void on_horizontalScrollBar_actionTriggered(int action);
+
+    void on_horizontalScrollBar_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
 

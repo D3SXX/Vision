@@ -1,6 +1,5 @@
 #include "audio.h"
 #include "mainwindow.h"
-
 Audio::Audio() {
 }
 
@@ -10,12 +9,12 @@ void Audio::init(){
     player->setAudioOutput(audioOutput);
 }
 void Audio::start(){
-    player->setSource(QUrl("qrc:/Vision.mp3"));
-    audioOutput->setVolume(50);
+    player->setSource(QUrl::fromLocalFile(this->audioPath));
+    qDebug ()<< this->audioPath;
+    audioOutput->setVolume(0.5);
     player->play();
     QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
 }
-
 void Audio::pause(){
     player->pause();
 }
@@ -45,4 +44,12 @@ void Audio::getMediaInfo(){
     qDebug() << "Album:" << this->album;
     qDebug() << "Cover Art:" << this->cover.width() <<"x"<< this->cover.height();
     emit mediaInfoChanged();
+}
+void Audio::setAudioPath(QString path){
+
+    this->audioPath = path;
+}
+void Audio::setVolumeLevel(float volume){
+    audioOutput->setVolume(volume);
+    qDebug()<<volume;
 }

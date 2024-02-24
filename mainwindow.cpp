@@ -3,6 +3,7 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QMediaFormat>
+#include <QFileDialog>
 
 Controls control;
 Audio audio;
@@ -54,6 +55,46 @@ void MainWindow::on_widget_4_windowIconTextChanged(const QString &iconText)
 
 void MainWindow::on_widget_4_windowIconChanged(const QIcon &icon)
 {
+
+}
+
+
+void MainWindow::on_comboBox_activated(int index)
+{
+    if(index==0){
+
+        QString audioFileName = QFileDialog::getOpenFileName(this,
+                                                tr("Open Image"), "/home/sergiu/Music", tr("Audio Files (*.mp3 *.flac)"));
+        audio.setAudioPath(audioFileName);
+
+
+    }
+}
+
+
+void MainWindow::on_horizontalSlider_actionTriggered(int action)
+{
+    //audio.setVolumeLevel(action);
+}
+
+
+void MainWindow::on_horizontalSlider_rangeChanged(int min, int max)
+{
+
+}
+
+
+void MainWindow::on_horizontalScrollBar_actionTriggered(int action)
+{
+    //audio.setVolumeLevel(action);
+
+}
+
+
+void MainWindow::on_horizontalScrollBar_valueChanged(int value)
+{
+    float tempValue = ((float)value)/100;
+    audio.setVolumeLevel(tempValue);
 
 }
 
