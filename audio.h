@@ -19,12 +19,15 @@ public:
     QString author;
     QString album;
     QImage cover;
-
     qint64 duration;
     qint64 position;
+    QString audioPath;
+    qint8 volumeInt;
 
 public slots:
     void getMediaInfo();
+    void setAudioPath(QString path);
+    void setVolumeLevel(float volume);
     void updatePosition();
 signals:
     void mediaInfoChanged();

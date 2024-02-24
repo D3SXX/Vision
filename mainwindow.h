@@ -25,11 +25,11 @@ private slots:
 
     void on_PlayPauseButton_clicked();
 
+    void on_comboBox_activated(int index);
 
+    void on_horizontalScrollBar_valueChanged(int value);
 
-    void on_widget_4_windowIconChanged(const QIcon &icon);
-
-    void on_widget_4_windowIconTextChanged(const QString &iconText);
+    void updatePosition();
 
 private:
     Ui::MainWindow *ui;

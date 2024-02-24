@@ -131,18 +131,14 @@
        <height>120</height>
       </rect>
      </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
      <property name="styleSheet">
-      <string notr="true">QProgressBar {
-	border: 1px solid black;
+      <string notr="true">QProgressBar{
+border: 1px solid black;
 	background-color:transparent;
 }
 QProgressBar::chunk {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 255, 255, 255), stop:1 rgb(208, 208, 208))
-}
-</string>
+}</string>
      </property>
      <property name="maximum">
       <number>0</number>
@@ -151,9 +147,6 @@ QProgressBar::chunk {
       <number>0</number>
      </property>
      <property name="textVisible">
-      <bool>false</bool>
-     </property>
-     <property name="invertedAppearance">
       <bool>false</bool>
      </property>
     </widget>
@@ -357,10 +350,38 @@ QProgressBar::chunk {
       </size>
      </property>
     </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>72</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Open File</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QScrollBar" name="horizontalScrollBar">
+     <property name="geometry">
+      <rect>
+       <x>740</x>
+       <y>520</y>
+       <width>160</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
     <widget class="QLabel" name="mediaPositionLabel">
      <property name="geometry">
       <rect>
-       <x>453</x>
+       <x>450</x>
        <y>570</y>
        <width>181</width>
        <height>20</height>

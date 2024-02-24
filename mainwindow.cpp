@@ -3,6 +3,7 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QMediaFormat>
+#include <QFileDialog>
 
 Controls control;
 Audio audio;
@@ -42,8 +43,29 @@ void MainWindow::updateData(){
     ui->TitleLabel->setText(audio.title);
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
-    ui->labelCover->setPixmap(audio.cover.isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
+    ui->labelCover->setPixmap(audio.cover.size().isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
+    qDebug() << audio.cover.isNull();
 }
+
+void MainWindow::on_comboBox_activated(int index)
+{
+    if(index==0){
+
+        QString audioFileName = QFileDialog::getOpenFileName(this,
+                                                tr("Open Image"), "/home/sergiu/Music", tr("Audio Files (*.mp3 *.flac)"));
+        audio.setAudioPath(audioFileName);
+
+
+    }
+}
+
+void MainWindow::on_horizontalScrollBar_valueChanged(int value)
+{
+    float tempValue = ((float)value)/100;
+    audio.setVolumeLevel(tempValue);
+
+}
+
 
 void  MainWindow::updatePosition(){
     ui->progressBar->setMaximum(audio.duration);
@@ -57,15 +79,3 @@ void  MainWindow::updatePosition(){
                            .arg((audio.duration / 1000) % 60, 2, 10, QChar('0'));
     ui->mediaPositionLabel->setText(position);
 }
-
-void MainWindow::on_widget_4_windowIconTextChanged(const QString &iconText)
-{
-
-}
-
-
-void MainWindow::on_widget_4_windowIconChanged(const QIcon &icon)
-{
-
-}
-
