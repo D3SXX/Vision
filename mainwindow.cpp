@@ -47,19 +47,6 @@ void MainWindow::updateData(){
     qDebug() << audio.cover.isNull();
 }
 
-
-void MainWindow::on_widget_4_windowIconTextChanged(const QString &iconText)
-{
-
-}
-
-
-void MainWindow::on_widget_4_windowIconChanged(const QIcon &icon)
-{
-
-}
-
-
 void MainWindow::on_comboBox_activated(int index)
 {
     if(index==0){
@@ -71,26 +58,6 @@ void MainWindow::on_comboBox_activated(int index)
 
     }
 }
-
-
-void MainWindow::on_horizontalSlider_actionTriggered(int action)
-{
-    //audio.setVolumeLevel(action);
-}
-
-
-void MainWindow::on_horizontalSlider_rangeChanged(int min, int max)
-{
-
-}
-
-
-void MainWindow::on_horizontalScrollBar_actionTriggered(int action)
-{
-    //audio.setVolumeLevel(action);
-
-}
-
 
 void MainWindow::on_horizontalScrollBar_valueChanged(int value)
 {
