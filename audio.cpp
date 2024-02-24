@@ -34,8 +34,15 @@ void Audio::getMediaInfo(){
         this->author = player->metaData().stringValue(QMediaMetaData::ContributingArtist);
     }
     this->album = player->metaData().stringValue(QMediaMetaData::AlbumTitle);
+    QVariant variant = player->metaData().value(QMediaMetaData::CoverArtImage);
+    if(variant.isNull()){
+        variant = player->metaData().value(QMediaMetaData::ThumbnailImage);
+    }
+    QImage image = variant.value<QImage>();
+    this->cover = image;
     qDebug() << "Title:" << this->title;
     qDebug() << "Author:" << this->author;
     qDebug() << "Album:" << this->album;
+    qDebug() << "Cover Art:" << this->cover.width() <<"x"<< this->cover.height();
     emit mediaInfoChanged();
 }

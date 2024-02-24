@@ -41,6 +41,8 @@ void MainWindow::updateData(){
     ui->TitleLabel->setText(audio.title);
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
+    ui->labelCover->setPixmap(audio.cover.size().isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
+    qDebug() << audio.cover.isNull();
 }
 
 

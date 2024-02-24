@@ -1,6 +1,7 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include <QPixmap>
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QMediaMetaData>
@@ -17,6 +18,8 @@ public:
     QString title;
     QString author;
     QString album;
+    QImage cover;
+
 public slots:
     void getMediaInfo();
 signals:
