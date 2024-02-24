@@ -19,6 +19,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void updateData();
+    void updatePosition();
+
 private slots:
 
     void on_PlayPauseButton_clicked();

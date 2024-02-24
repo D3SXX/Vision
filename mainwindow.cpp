@@ -79,4 +79,3 @@ void  MainWindow::updatePosition(){
                            .arg((audio.duration / 1000) % 60, 2, 10, QChar('0'));
     ui->mediaPositionLabel->setText(position);
 }
-
