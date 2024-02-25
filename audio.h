@@ -32,6 +32,7 @@ public slots:
     void setAudioPath(QString path);
     void setVolumeLevel(qfloat16 volume);
     void updatePosition();
+    void setPosition(qint64 position);
 signals:
     void mediaInfoChanged();
     void positionChanged();

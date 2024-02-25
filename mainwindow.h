@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "mousetrackingslider.h"
 #include "audio.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,11 +26,15 @@ private slots:
 
     void on_comboBox_activated(int index);
 
-    void on_horizontalScrollBar_valueChanged(int value);
+    void on_VolumeLevelScrollBar_valueChanged(int value);
+
+    void togglePlayback(bool forcePlay);
 
     void updatePosition();
 
     void updateVolumeElements();
+
+    void on_progresslSlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

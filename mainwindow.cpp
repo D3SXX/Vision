@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QMediaFormat>
 #include <QFileDialog>
+#include <QTableView>
+#include <QStandardItemModel>
 
 Audio audio;
 
@@ -21,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     if(!audio.volume){ // If the volume value is absent set it
         audio.setVolumeLevel(0.5);
     }
+    this->setWindowTitle("Vision (dev)"); // Window Title
+    /*W.I.P. make QSlider that would go to the place where user has pressed*/
+    //MouseTrackingSlider *progresslSlider;
+    //ui->progresslSlider = new MouseTrackingSlider();
 }
 
 MainWindow::~MainWindow()
@@ -30,16 +36,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_PlayPauseButton_clicked()
 {
-    audio.onPlay = !audio.onPlay;
-    if(audio.onPlay){
-        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
-        audio.start();
-
-    }else {
-        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-start"));
-        audio.pause();
-    }
-    qDebug() << "Play is set to" << (audio.onPlay ? "True (Playing)" : "False (Not playing)");
+    this->togglePlayback(false);
 }
 
 void MainWindow::updateData(){
@@ -62,13 +59,11 @@ void MainWindow::on_comboBox_activated(int index)
             return;
         }
         audio.setAudioPath(audioFileName);
-        audio.start(); // Start playing right after discovering new path
-        audio.onPlay = true; // Maybe make a method for this later
-        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
+        this->togglePlayback(true); // Start playing right after discovering new path
     }
 }
 
-void MainWindow::on_horizontalScrollBar_valueChanged(int value)
+void MainWindow::on_VolumeLevelScrollBar_valueChanged(int value)
 {
     audio.setVolumeLevel((float)value / 100);
 }
@@ -76,8 +71,8 @@ void MainWindow::on_horizontalScrollBar_valueChanged(int value)
 void  MainWindow::updateVolumeElements(){
     /*When the global variable for volume changes make sure that the GUI displays it correctly*/
     qint8 audioInt = round(audio.volume * 100);
-    if(ui->horizontalScrollBar->value() != audioInt){
-        ui->horizontalScrollBar->setValue(audioInt);
+    if(ui->VolumeLevelScrollBar->value() != audioInt){
+        ui->VolumeLevelScrollBar->setValue(audioInt);
     }
     ui->AudioVolumeLabel->setText(QString("%1%2")
                            .arg(audioInt)
@@ -95,4 +90,32 @@ void  MainWindow::updatePosition(){
                            .arg((audio.duration / (1000 * 60)) % 60, 2, 10, QChar('0'))
                            .arg((audio.duration / 1000) % 60, 2, 10, QChar('0'));
     ui->mediaPositionLabel->setText(position);
+    ui->progresslSlider->setMaximum(audio.duration);
+    ui->progresslSlider->setPageStep(audio.duration*0.10);
+    ui->progresslSlider->setValue(audio.position);
+}
+void MainWindow::togglePlayback(bool forcePlay){
+    audio.onPlay = !audio.onPlay;
+    if(forcePlay){
+        audio.onPlay = true;
+    }
+    if(audio.onPlay){
+        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
+        audio.start();
+
+    }else {
+        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-start"));
+        audio.pause();
+    }
+    qDebug() << "Play is set to" << (audio.onPlay ? "True (Playing)" : "False (Not playing)");
+
+}
+
+void MainWindow::on_progresslSlider_valueChanged(int value)
+{
+    if(value == audio.position){ // When we change the value for it using setValue(audio.position) the signal triggers this function as well, this helps to reduce this recursion
+        return;
+    }
+    qDebug() << value;
+    audio.setPosition(value);
 }

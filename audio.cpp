@@ -8,7 +8,7 @@ void Audio::init(){
     audioOutput = new QAudioOutput;
     player->setAudioOutput(audioOutput);
     QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
-    QObject::connect(player, &QMediaPlayer::positionChanged, this, &Audio::updatePosition);
+    QObject::connect(player, &QMediaPlayer::positionChanged, this, &Audio::updatePosition); // For progress bar/slider
 }
 void Audio::start(){
     player->setSource(QUrl::fromLocalFile(this->audioPath));
@@ -48,7 +48,6 @@ void Audio::getMediaInfo(){
     emit mediaInfoChanged();
 }
 void Audio::setAudioPath(QString path){
-
     this->audioPath = path;
 }
 void Audio::setVolumeLevel(qfloat16 volume){
@@ -60,4 +59,8 @@ void Audio::setVolumeLevel(qfloat16 volume){
 void Audio::updatePosition(){
     this->position = player->position();
     emit positionChanged();
+}
+
+void Audio::setPosition(qint64 position){
+    player->setPosition(position);
 }
