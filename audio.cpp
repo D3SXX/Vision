@@ -13,7 +13,7 @@ void Audio::init(){
 void Audio::start(){
     player->setSource(QUrl::fromLocalFile(this->audioPath));
     qDebug ()<< this->audioPath;
-    audioOutput->setVolume(0.5);
+    audioOutput->setVolume(this->volume);
     player->play();
 }
 void Audio::pause(){
@@ -51,9 +51,11 @@ void Audio::setAudioPath(QString path){
 
     this->audioPath = path;
 }
-void Audio::setVolumeLevel(float volume){
+void Audio::setVolumeLevel(qfloat16 volume){
+    this->volume = volume;
     audioOutput->setVolume(volume);
     qDebug()<<volume;
+    emit volumeChanged();
 }
 void Audio::updatePosition(){
     this->position = player->position();

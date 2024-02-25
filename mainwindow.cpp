@@ -5,7 +5,6 @@
 #include <QMediaFormat>
 #include <QFileDialog>
 
-Controls control;
 Audio audio;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -16,8 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     QPixmap cover(":/V-Cover-Art-dev.png"); // Setting up image file that will be used as cover art
     ui->labelCover->setPixmap(cover.scaled(400,400,Qt::KeepAspectRatio)); // Putting it into label
     audio.init();
-    QObject::connect(&audio, &Audio::mediaInfoChanged, this, &MainWindow::updateData);
-    QObject::connect(&audio, &Audio::positionChanged, this, &MainWindow::updatePosition);
+    QObject::connect(&audio, &Audio::mediaInfoChanged, this, &MainWindow::updateData); // Get media data right after the initialization is finished
+    QObject::connect(&audio, &Audio::positionChanged, this, &MainWindow::updatePosition); // Update progress bar and labels
+    QObject::connect(&audio, &Audio::volumeChanged, this, &MainWindow::updateVolumeElements); // Update UI Elements if the volume value was changed
+    if(!audio.volume){ // If the volume value is absent set it
+        audio.setVolumeLevel(0.5);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -27,8 +30,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_PlayPauseButton_clicked()
 {
-    control.onPlay = !control.onPlay;
-    if(control.onPlay){
+    audio.onPlay = !audio.onPlay;
+    if(audio.onPlay){
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
         audio.start();
 
@@ -36,15 +39,16 @@ void MainWindow::on_PlayPauseButton_clicked()
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-start"));
         audio.pause();
     }
-    qDebug() << "Play is set to" << (control.onPlay ? "True (Playing)" : "False (Not playing)");
+    qDebug() << "Play is set to" << (audio.onPlay ? "True (Playing)" : "False (Not playing)");
 }
 
 void MainWindow::updateData(){
     ui->TitleLabel->setText(audio.title);
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
-    ui->labelCover->setPixmap(audio.cover.size().isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
-    qDebug() << audio.cover.isNull();
+    ui->labelCover->setPixmap(audio.cover.isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
+    QString debugCoverMsg = audio.cover.isNull() ? "Cover Art was not found or is empty!" : "Cover Art was found and set";
+    qDebug() << debugCoverMsg;
 }
 
 void MainWindow::on_comboBox_activated(int index)
@@ -52,20 +56,33 @@ void MainWindow::on_comboBox_activated(int index)
     if(index==0){
 
         QString audioFileName = QFileDialog::getOpenFileName(this,
-                                                tr("Open Image"), "/home/sergiu/Music", tr("Audio Files (*.mp3 *.flac)"));
+                                                tr("Open Audio File"), "/home/sergiu/Music", tr("Audio Files (*.mp3 *.flac)"));
+        if (audioFileName == ""){
+            qDebug("File path is empty, nothing to do..");
+            return;
+        }
         audio.setAudioPath(audioFileName);
-
-
+        audio.start(); // Start playing right after discovering new path
+        audio.onPlay = true; // Maybe make a method for this later
+        ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
     }
 }
 
 void MainWindow::on_horizontalScrollBar_valueChanged(int value)
 {
-    float tempValue = ((float)value)/100;
-    audio.setVolumeLevel(tempValue);
-
+    audio.setVolumeLevel((float)value / 100);
 }
 
+void  MainWindow::updateVolumeElements(){
+    /*When the global variable for volume changes make sure that the GUI displays it correctly*/
+    qint8 audioInt = round(audio.volume * 100);
+    if(ui->horizontalScrollBar->value() != audioInt){
+        ui->horizontalScrollBar->setValue(audioInt);
+    }
+    ui->AudioVolumeLabel->setText(QString("%1%2")
+                           .arg(audioInt)
+                           .arg("%"));
+}
 
 void  MainWindow::updatePosition(){
     ui->progressBar->setMaximum(audio.duration);

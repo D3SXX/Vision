@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "controls.h"
 #include "audio.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,7 +18,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void updateData();
-    void updatePosition();
 
 private slots:
 
@@ -30,6 +28,8 @@ private slots:
     void on_horizontalScrollBar_valueChanged(int value);
 
     void updatePosition();
+
+    void updateVolumeElements();
 
 private:
     Ui::MainWindow *ui;

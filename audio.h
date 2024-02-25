@@ -5,6 +5,7 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QMediaMetaData>
+#include <QFloat16>
 #include <QObject>
 
 class Audio : public QObject
@@ -15,6 +16,7 @@ public:
     void init();
     void start();
     void pause();
+    bool onPlay;
     QString title;
     QString author;
     QString album;
@@ -22,16 +24,18 @@ public:
     qint64 duration;
     qint64 position;
     QString audioPath;
-    qint8 volumeInt;
+    qfloat16 volume;
+
 
 public slots:
     void getMediaInfo();
     void setAudioPath(QString path);
-    void setVolumeLevel(float volume);
+    void setVolumeLevel(qfloat16 volume);
     void updatePosition();
 signals:
     void mediaInfoChanged();
     void positionChanged();
+    void volumeChanged();
 private:
 
     QMediaPlayer *player;

@@ -374,6 +374,15 @@ QProgressBar::chunk {
        <height>16</height>
       </rect>
      </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -385,6 +394,22 @@ QProgressBar::chunk {
        <y>570</y>
        <width>181</width>
        <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="AudioVolumeLabel">
+     <property name="geometry">
+      <rect>
+       <x>800</x>
+       <y>490</y>
+       <width>54</width>
+       <height>17</height>
       </rect>
      </property>
      <property name="text">
