@@ -30,6 +30,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         audio.h audio.cpp
         mousetrackingslider.h mousetrackingslider.cpp
+        source.h source.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET V APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
+#include <QForeach>
 #include "mousetrackingslider.h"
 #include "audio.h"
+#include "source.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,6 +38,14 @@ private slots:
     void updateVolumeElements();
 
     void on_progresslSlider_valueChanged(int value);
+
+    void on_SelectFileButton_clicked();
+
+    void on_SelectLibraryButton_clicked();
+
+    void updateLibraryElements();
+
+    void on_LibraryListWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;

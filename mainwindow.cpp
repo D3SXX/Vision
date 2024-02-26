@@ -8,6 +8,7 @@
 #include <QStandardItemModel>
 
 Audio audio;
+Source source;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&audio, &Audio::mediaInfoChanged, this, &MainWindow::updateData); // Get media data right after the initialization is finished
     QObject::connect(&audio, &Audio::positionChanged, this, &MainWindow::updatePosition); // Update progress bar and labels
     QObject::connect(&audio, &Audio::volumeChanged, this, &MainWindow::updateVolumeElements); // Update UI Elements if the volume value was changed
+    QObject::connect(&source, &Source::libraryChanged, this, &MainWindow::updateLibraryElements);
     if(!audio.volume){ // If the volume value is absent set it
         audio.setVolumeLevel(0.5);
     }
@@ -53,7 +55,9 @@ void MainWindow::on_comboBox_activated(int index)
     if(index==0){
 
         QString audioFileName = QFileDialog::getOpenFileName(this,
-                                                tr("Open Audio File"), "/home/sergiu/Music", tr("Audio Files (*.mp3 *.flac)"));
+                                                             tr("Open Audio File"),
+                                                             "/home/sergiu/Music",
+                                                             tr("Audio Files (*.mp3 *.flac *.wav);; Directory"));
         if (audioFileName == ""){
             qDebug("File path is empty, nothing to do..");
             return;
@@ -77,6 +81,16 @@ void  MainWindow::updateVolumeElements(){
     ui->AudioVolumeLabel->setText(QString("%1%2")
                            .arg(audioInt)
                            .arg("%"));
+}
+
+void MainWindow::updateLibraryElements(){
+    ui->LibraryListWidget->clear();
+    foreach(QString path, source.libraryPaths){
+        foreach(QString file,source.libraryFiles[path]){
+            QListWidgetItem* item = new QListWidgetItem(file, ui->LibraryListWidget);
+            item->setToolTip(path);
+        }
+    }
 }
 
 void  MainWindow::updatePosition(){
@@ -119,3 +133,37 @@ void MainWindow::on_progresslSlider_valueChanged(int value)
     qDebug() << value;
     audio.setPosition(value);
 }
+
+void MainWindow::on_SelectFileButton_clicked()
+{
+    QString audioFileName = QFileDialog::getOpenFileName(this,
+                                                         tr("Open Audio File"),
+                                                         "/home/sergiu/Music",
+                                                         tr("Audio Files (*.mp3 *.flac *.wav);; Directory"));
+    if (audioFileName == ""){
+        qDebug("File path is empty, nothing to do..");
+        return;
+    }
+    audio.setAudioPath(audioFileName);
+    this->togglePlayback(true); // Start playing right after discovering new path
+}
+
+
+void MainWindow::on_SelectLibraryButton_clicked()
+{
+    QString audioDirectory = QFileDialog::getExistingDirectory(this,
+                                                         tr("Select library location"),
+                                                         "/home/sergiu/Music",
+                                                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    source.HandlePath(audioDirectory);
+    //audio.setAudioPath(audioFileName);
+    //this->togglePlayback(true); // Start playing right after discovering new path
+}
+
+
+void MainWindow::on_LibraryListWidget_itemClicked(QListWidgetItem *item)
+{
+    audio.setAudioPath(item->toolTip() + "/" +  item->text());
+    this->togglePlayback(true);
+}
+
