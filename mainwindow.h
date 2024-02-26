@@ -47,6 +47,8 @@ private slots:
 
     void on_LibraryListWidget_itemClicked(QListWidgetItem *item);
 
+    void updateLibrarySelectedItem();
+
 private:
     Ui::MainWindow *ui;
 

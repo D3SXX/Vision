@@ -44,9 +44,15 @@
        <height>661</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <item>
       <property name="text">
        <string>Library is empty</string>
+      </property>
+      <property name="flags">
+       <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
       </property>
      </item>
     </widget>

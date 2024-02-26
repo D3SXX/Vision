@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&audio, &Audio::positionChanged, this, &MainWindow::updatePosition); // Update progress bar and labels
     QObject::connect(&audio, &Audio::volumeChanged, this, &MainWindow::updateVolumeElements); // Update UI Elements if the volume value was changed
     QObject::connect(&source, &Source::libraryChanged, this, &MainWindow::updateLibraryElements);
+    QObject::connect(&audio, &Audio::playlistItemChanged, this, &MainWindow::updateLibrarySelectedItem);
     if(!audio.volume){ // If the volume value is absent set it
         audio.setVolumeLevel(0.5);
     }
@@ -86,11 +87,22 @@ void  MainWindow::updateVolumeElements(){
 void MainWindow::updateLibraryElements(){
     ui->LibraryListWidget->clear();
     foreach(QString path, source.libraryPaths){
+        QListWidgetItem* pathItem = new QListWidgetItem(path, ui->LibraryListWidget);
+        pathItem->font().bold();
+        pathItem->setFlags(Qt::NoItemFlags);
+        pathItem->setToolTip(path);
+        pathItem->setWhatsThis("Directory");
         foreach(QString file,source.libraryFiles[path]){
             QListWidgetItem* item = new QListWidgetItem(file, ui->LibraryListWidget);
             item->setToolTip(path);
+            item->setWhatsThis("Audio file");
+
         }
     }
+}
+
+void MainWindow::updateLibrarySelectedItem(){
+    ui->LibraryListWidget->item(audio.playlistPosition+1)->setSelected(true);
 }
 
 void  MainWindow::updatePosition(){
@@ -108,14 +120,19 @@ void  MainWindow::updatePosition(){
     ui->progresslSlider->setPageStep(audio.duration*0.10);
     ui->progresslSlider->setValue(audio.position);
 }
-void MainWindow::togglePlayback(bool forcePlay){
+void MainWindow::togglePlayback(bool forceStart){
     audio.onPlay = !audio.onPlay;
-    if(forcePlay){
+    if(forceStart){
         audio.onPlay = true;
     }
     if(audio.onPlay){
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-pause"));
-        audio.start();
+        if(audio.isPaused && !forceStart){
+            audio.resume();
+        }
+        else{
+            audio.start();
+        }
 
     }else {
         ui->PlayPauseButton->setIcon(QIcon::fromTheme("media-playback-start"));
@@ -163,7 +180,11 @@ void MainWindow::on_SelectLibraryButton_clicked()
 
 void MainWindow::on_LibraryListWidget_itemClicked(QListWidgetItem *item)
 {
+    if(item->whatsThis() != "Audio file"){ // One way to check if the item is an actual audio file
+        return;
+    }
     audio.setAudioPath(item->toolTip() + "/" +  item->text());
+    audio.setPlaylist(source.libraryFiles[item->toolTip()],item->toolTip(), source.getIndexOfItem(item->text(),item->toolTip()));
     this->togglePlayback(true);
 }
 

@@ -21,6 +21,8 @@ public slots:
 
     void addFile(QString path);
 
+    qint16 getIndexOfItem(QString filename,QString directory);
+
 signals:
 
     void libraryChanged();

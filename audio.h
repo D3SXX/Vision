@@ -17,6 +17,8 @@ public:
     void start();
     void pause();
     bool onPlay;
+    bool isPaused;
+
     QString title;
     QString author;
     QString album;
@@ -24,8 +26,13 @@ public:
     qint64 duration;
     qint64 position;
     QString audioPath;
+    QString audioName;
     qfloat16 volume;
 
+    QStringList playlist;
+    QString playlistPath;
+    qint8 playlistPosition;
+    bool playlistRepeat = false;
 
 public slots:
     void getMediaInfo();
@@ -33,10 +40,14 @@ public slots:
     void setVolumeLevel(qfloat16 volume);
     void updatePosition();
     void setPosition(qint64 position);
+    void resume();
+    void playNextItem();
+    void setPlaylist(QStringList playlist,QString path, qint16 startFromPosition);
 signals:
     void mediaInfoChanged();
     void positionChanged();
     void volumeChanged();
+    void playlistItemChanged();
 private:
 
     QMediaPlayer *player;

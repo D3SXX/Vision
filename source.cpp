@@ -11,9 +11,9 @@ void Source::HandlePath(QString path){
     qDebug() << "Got folder" << path;
     QDir directory(path);
     QStringList filters;
-    filters << "*.mp3" << "*.wav";
+    filters << "*.mp3" << "*.flac" << "*.wav"; // Add more filetypes later
     directory.setNameFilters(filters);
-    QStringList audioFiles = directory.entryList();
+    QStringList audioFiles = directory.entryList(); // Get every audio file
     if(audioFiles.isEmpty()){
         qDebug("No Audio files were found, nothing to do..");
         return;
@@ -28,4 +28,10 @@ void Source::HandlePath(QString path){
 
 void Source::addFile(QString path){
 
+}
+
+qint16 Source::getIndexOfItem(QString filename,QString directory){
+    QStringList files = this->libraryFiles[directory];
+    qint16 k = files.indexOf(filename);
+    return files.indexOf(filename);
 }
