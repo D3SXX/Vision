@@ -29,8 +29,6 @@ private slots:
 
     void on_comboBox_activated(int index);
 
-    void on_VolumeLevelScrollBar_valueChanged(int value);
-
     void togglePlayback(bool forcePlay);
 
     void updatePosition();
@@ -48,6 +46,15 @@ private slots:
     void on_LibraryListWidget_itemClicked(QListWidgetItem *item);
 
     void updateLibrarySelectedItem();
+
+    void on_SeekForwardButton_clicked();
+
+    void on_SeekBackwardButton_clicked();
+
+
+
+    void on_VolumeLevelSlider_valueChanged(int value);
+
 
 private:
     Ui::MainWindow *ui;

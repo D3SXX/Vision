@@ -68,16 +68,11 @@ void MainWindow::on_comboBox_activated(int index)
     }
 }
 
-void MainWindow::on_VolumeLevelScrollBar_valueChanged(int value)
-{
-    audio.setVolumeLevel((float)value / 100);
-}
-
 void  MainWindow::updateVolumeElements(){
     /*When the global variable for volume changes make sure that the GUI displays it correctly*/
     qint8 audioInt = round(audio.volume * 100);
-    if(ui->VolumeLevelScrollBar->value() != audioInt){
-        ui->VolumeLevelScrollBar->setValue(audioInt);
+    if(ui->VolumeLevelSlider->value() != audioInt){
+        ui->VolumeLevelSlider->setValue(audioInt);
     }
     ui->AudioVolumeLabel->setText(QString("%1%2")
                            .arg(audioInt)
@@ -186,5 +181,24 @@ void MainWindow::on_LibraryListWidget_itemClicked(QListWidgetItem *item)
     audio.setAudioPath(item->toolTip() + "/" +  item->text());
     audio.setPlaylist(source.libraryFiles[item->toolTip()],item->toolTip(), source.getIndexOfItem(item->text(),item->toolTip()));
     this->togglePlayback(true);
+}
+
+
+void MainWindow::on_SeekForwardButton_clicked()
+{
+    audio.playNextItem();
+}
+
+
+void MainWindow::on_SeekBackwardButton_clicked()
+{
+    audio.playPastItem();
+}
+
+
+
+void MainWindow::on_VolumeLevelSlider_valueChanged(int value)
+{
+    audio.setVolumeLevel((float)value / 100);
 }
 

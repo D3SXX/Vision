@@ -434,28 +434,6 @@ QProgressBar::chunk {
       </size>
      </property>
     </widget>
-    <widget class="QScrollBar" name="VolumeLevelScrollBar">
-     <property name="geometry">
-      <rect>
-       <x>740</x>
-       <y>520</y>
-       <width>160</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>1</number>
-     </property>
-     <property name="value">
-      <number>0</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
     <widget class="QLabel" name="mediaPositionLabel">
      <property name="geometry">
       <rect>
@@ -475,7 +453,7 @@ QProgressBar::chunk {
     <widget class="QLabel" name="AudioVolumeLabel">
      <property name="geometry">
       <rect>
-       <x>800</x>
+       <x>1000</x>
        <y>490</y>
        <width>54</width>
        <height>17</height>
@@ -486,6 +464,32 @@ QProgressBar::chunk {
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QSlider" name="VolumeLevelSlider">
+     <property name="geometry">
+      <rect>
+       <x>975</x>
+       <y>70</y>
+       <width>101</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSlider::add-page {
+    background: none;
+}
+
+QSlider::sub-page {
+    background: none;
+    margin-right: 50px; /* Adjust the margin as needed */
+}</string>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </widget>

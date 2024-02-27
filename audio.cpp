@@ -9,7 +9,7 @@ void Audio::init(){
     player->setAudioOutput(audioOutput);
     QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
     QObject::connect(player, &QMediaPlayer::positionChanged, this, &Audio::updatePosition); // For progress bar/slider
-    QObject::connect(player, &QMediaPlayer::playingChanged, this, &Audio::playNextItem);
+    QObject::connect(player, &QMediaPlayer::playingChanged, this, &Audio::autoPlayNextItem);
 }
 void Audio::start(){
     qDebug ()<< this->audioPath;
@@ -89,11 +89,45 @@ void Audio::setPosition(qint64 position){
     player->setPosition(position);
 }
 
-void Audio::playNextItem(){
+void Audio::autoPlayNextItem(){
     if(!player->isPlaying() && this->position == this->duration){ // Checking if it is not the start and the pause was not triggered by user
-        this->playlistPosition++;
+        if(!this->increasePlaylistPosition()){
+            return;
+        }
         this->setAudioPath(this->playlistPath + "/" + this->playlist[this->playlistPosition]); // Get the next audiopath
         this->start();
         emit playlistItemChanged();
     }
+}
+
+void Audio::playNextItem(){
+    this->increasePlaylistPosition();
+    this->setAudioPath(this->playlistPath + "/" + this->playlist[this->playlistPosition]); // Get the next audiopath
+    this->start();
+    emit playlistItemChanged();
+
+}
+
+void Audio::playPastItem(){
+    this->decreasePlaylistPosition();
+    this->setAudioPath(this->playlistPath + "/" + this->playlist[this->playlistPosition]); // Get the next audiopath
+    this->start();
+    emit playlistItemChanged();
+
+}
+
+bool Audio::decreasePlaylistPosition(){
+    if(this->playlistPosition <= 0){
+        return false;
+}
+    this->playlistPosition--;
+return true;
+}
+
+bool Audio::increasePlaylistPosition(){
+    if(this->playlistPosition >= playlist.size()-1){
+        return false;
+    }
+    this->playlistPosition++;
+    return true;
 }

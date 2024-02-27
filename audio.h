@@ -41,8 +41,12 @@ public slots:
     void updatePosition();
     void setPosition(qint64 position);
     void resume();
+    void autoPlayNextItem();
     void playNextItem();
+    void playPastItem();
     void setPlaylist(QStringList playlist,QString path, qint16 startFromPosition);
+    bool decreasePlaylistPosition();
+    bool increasePlaylistPosition();
 signals:
     void mediaInfoChanged();
     void positionChanged();
