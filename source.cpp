@@ -5,7 +5,7 @@ Source::Source() {}
 
 void Source::HandlePath(QString path){
     if (path.isNull()){
-        qDebug("File path is empty, nothing to do..");
+        qDebug("Directory's path is empty, nothing to do..");
         return;
     }
     qDebug() << "Got folder" << path;
@@ -27,7 +27,18 @@ void Source::HandlePath(QString path){
 }
 
 void Source::addFile(QString path){
-
+    if (path.isNull()){
+        qDebug("File's path is empty, nothing to do..");
+        return;
+    }
+    qDebug() << "Got file" << path;
+    QFileInfo fileInfo(path);
+    QString directoryPath = fileInfo.path();
+    QString fileName = fileInfo.fileName();
+    this->libraryPaths.append(directoryPath);
+    QStringList filenameList = {fileName};
+    this->libraryFiles[directoryPath] =  filenameList;
+    emit libraryChanged();
 }
 
 qint16 Source::getIndexOfItem(QString filename,QString directory){

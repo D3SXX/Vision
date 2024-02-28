@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QForeach>
+#include <QGraphicsBlurEffect>
 #include "mousetrackingslider.h"
 #include "audio.h"
 #include "source.h"
@@ -27,8 +28,6 @@ private slots:
 
     void on_PlayPauseButton_clicked();
 
-    void on_comboBox_activated(int index);
-
     void togglePlayback(bool forcePlay);
 
     void updatePosition();
@@ -51,10 +50,12 @@ private slots:
 
     void on_SeekBackwardButton_clicked();
 
-
-
     void on_VolumeLevelSlider_valueChanged(int value);
 
+
+    void on_AddFileButton_clicked();
+
+    void on_AddDirectoryButton_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(!audio.volume){ // If the volume value is absent set it
         audio.setVolumeLevel(0.5);
     }
+    ui->LibraryEmptyFrame->setVisible(source.libraryPaths.isEmpty()); // Enable/Disable pop-up frame for getting source
     this->setWindowTitle("Vision (dev)"); // Window Title
     /*W.I.P. make QSlider that would go to the place where user has pressed*/
     //MouseTrackingSlider *progresslSlider;
@@ -47,25 +48,15 @@ void MainWindow::updateData(){
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
     ui->labelCover->setPixmap(audio.cover.isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
+    ui->BitrateLabel->setText(QString("%1 kpbs").arg(audio.bitrate/1000));
+    ui->CodecLabel->setText(audio.codec);
+    ui->TypeLabel->setText(audio.type);
+    ui->CentralBackgroundLabel->setPixmap(audio.cover.isNull() ? QPixmap("") : QPixmap::fromImage(audio.cover));
+    QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect;
+    blurEffect->setBlurRadius(20);
+    ui->CentralBackgroundLabel->setGraphicsEffect(blurEffect);
     QString debugCoverMsg = audio.cover.isNull() ? "Cover Art was not found or is empty!" : "Cover Art was found and set";
     qDebug() << debugCoverMsg;
-}
-
-void MainWindow::on_comboBox_activated(int index)
-{
-    if(index==0){
-
-        QString audioFileName = QFileDialog::getOpenFileName(this,
-                                                             tr("Open Audio File"),
-                                                             "/home/sergiu/Music",
-                                                             tr("Audio Files (*.mp3 *.flac *.wav);; Directory"));
-        if (audioFileName == ""){
-            qDebug("File path is empty, nothing to do..");
-            return;
-        }
-        audio.setAudioPath(audioFileName);
-        this->togglePlayback(true); // Start playing right after discovering new path
-    }
 }
 
 void  MainWindow::updateVolumeElements(){
@@ -80,6 +71,7 @@ void  MainWindow::updateVolumeElements(){
 }
 
 void MainWindow::updateLibraryElements(){
+    ui->LibraryEmptyFrame->setVisible(false);
     ui->LibraryListWidget->clear();
     foreach(QString path, source.libraryPaths){
         QListWidgetItem* pathItem = new QListWidgetItem(path, ui->LibraryListWidget);
@@ -150,13 +142,9 @@ void MainWindow::on_SelectFileButton_clicked()
 {
     QString audioFileName = QFileDialog::getOpenFileName(this,
                                                          tr("Open Audio File"),
-                                                         "/home/sergiu/Music",
-                                                         tr("Audio Files (*.mp3 *.flac *.wav);; Directory"));
-    if (audioFileName == ""){
-        qDebug("File path is empty, nothing to do..");
-        return;
-    }
-    audio.setAudioPath(audioFileName);
+                                                         QDir::homePath(),
+                                                         tr("Audio Files (*.mp3 *.flac *.wav)"));
+    source.addFile(audioFileName);
     this->togglePlayback(true); // Start playing right after discovering new path
 }
 
@@ -165,11 +153,9 @@ void MainWindow::on_SelectLibraryButton_clicked()
 {
     QString audioDirectory = QFileDialog::getExistingDirectory(this,
                                                          tr("Select library location"),
-                                                         "/home/sergiu/Music",
+                                                        QDir::homePath(),
                                                          QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     source.HandlePath(audioDirectory);
-    //audio.setAudioPath(audioFileName);
-    //this->togglePlayback(true); // Start playing right after discovering new path
 }
 
 
@@ -200,5 +186,25 @@ void MainWindow::on_SeekBackwardButton_clicked()
 void MainWindow::on_VolumeLevelSlider_valueChanged(int value)
 {
     audio.setVolumeLevel((float)value / 100);
+}
+
+
+void MainWindow::on_AddFileButton_clicked()
+{
+    QString audioFileName = QFileDialog::getOpenFileName(this,
+                                                         tr("Open Audio File"),
+                                                         QDir::homePath(),
+                                                         tr("Audio Files (*.mp3 *.flac *.wav)"));
+    source.addFile(audioFileName);
+}
+
+
+void MainWindow::on_AddDirectoryButton_clicked()
+{
+    QString audioDirectory = QFileDialog::getExistingDirectory(this,
+                                                               tr("Select library location"),
+                                                               QDir::homePath(),
+                                                               QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    source.HandlePath(audioDirectory);
 }
 

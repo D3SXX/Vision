@@ -10,6 +10,7 @@ void Audio::init(){
     QObject::connect(player, &QMediaPlayer::metaDataChanged, this, &Audio::getMediaInfo);
     QObject::connect(player, &QMediaPlayer::positionChanged, this, &Audio::updatePosition); // For progress bar/slider
     QObject::connect(player, &QMediaPlayer::playingChanged, this, &Audio::autoPlayNextItem);
+
 }
 void Audio::start(){
     qDebug ()<< this->audioPath;
@@ -49,12 +50,24 @@ void Audio::getMediaInfo(){
     QImage image = variant.value<QImage>();
     this->cover = image;
     this->duration = player->duration();
+    QVariant bitrate = player->metaData().value(QMediaMetaData::AudioBitRate);
+    if (bitrate.canConvert<int>()){
+        this->bitrate = bitrate.toInt();
+    }
+    else{
+        this->bitrate = -1;
+    }
+    this->codec = player->metaData().stringValue(QMediaMetaData::AudioCodec);
+    this->type = player->metaData().stringValue(QMediaMetaData::MediaType); // Check later
+
     qDebug() << "Title:" << this->title;
     qDebug() << "Author:" << this->author;
     qDebug() << "Album:" << this->album;
     qDebug() << "Cover Art:" << this->cover.width() <<"x"<< this->cover.height();
+    qDebug() << "Bitrate, codec, type:" << this->bitrate <<","<< this->codec << "," << this->type;
     emit mediaInfoChanged();
 }
+
 void Audio::setAudioPath(QString path){
     this->audioPath = path;
     /*Safe way of getting filename from filepath, maybe change it later for something more efficient*/

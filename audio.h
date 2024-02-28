@@ -7,6 +7,8 @@
 #include <QMediaMetaData>
 #include <QFloat16>
 #include <QObject>
+#include <QAudioFormat>
+#include <QAudioDecoder>
 
 class Audio : public QObject
 {
@@ -23,6 +25,9 @@ public:
     QString author;
     QString album;
     QImage cover;
+    int bitrate;
+    QString codec;
+    QString type;
     qint64 duration;
     qint64 position;
     QString audioPath;
