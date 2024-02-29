@@ -9,6 +9,7 @@
 
 Audio audio;
 Source source;
+Waveform waveform;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&audio, &Audio::volumeChanged, this, &MainWindow::updateVolumeElements); // Update UI Elements if the volume value was changed
     QObject::connect(&source, &Source::libraryChanged, this, &MainWindow::updateLibraryElements);
     QObject::connect(&audio, &Audio::playlistItemChanged, this, &MainWindow::updateLibrarySelectedItem);
+    QObject::connect(&audio, &Audio::requestNextPlaylist, this, &MainWindow::playNextPlaylist);
     if(!audio.volume){ // If the volume value is absent set it
         audio.setVolumeLevel(0.5);
     }
@@ -72,13 +74,18 @@ void  MainWindow::updateVolumeElements(){
 
 void MainWindow::updateLibraryElements(){
     ui->LibraryEmptyFrame->setVisible(false);
+    ui->LibraryPathsAmountLabel->setText(QString("Dir(s): %1").arg(source.libraryPathsAmount));
+    ui->LibraryFilesAmountLabel->setText(QString("File(s): %1").arg(source.libraryFilesAmount));
     ui->LibraryListWidget->clear();
+    quint16 position = 0;
     foreach(QString path, source.libraryPaths){
         QListWidgetItem* pathItem = new QListWidgetItem(path, ui->LibraryListWidget);
         pathItem->font().bold();
         pathItem->setFlags(Qt::NoItemFlags);
         pathItem->setToolTip(path);
         pathItem->setWhatsThis("Directory");
+        uiLibraryPositions[path] = position;
+        position += source.libraryFiles[path].size() + 1;
         foreach(QString file,source.libraryFiles[path]){
             QListWidgetItem* item = new QListWidgetItem(file, ui->LibraryListWidget);
             item->setToolTip(path);
@@ -89,7 +96,7 @@ void MainWindow::updateLibraryElements(){
 }
 
 void MainWindow::updateLibrarySelectedItem(){
-    ui->LibraryListWidget->item(audio.playlistPosition+1)->setSelected(true);
+    ui->LibraryListWidget->item(this->uiLibraryPositions[audio.playlistPath] + audio.playlistPosition+1)->setSelected(true);
 }
 
 void  MainWindow::updatePosition(){
@@ -196,6 +203,7 @@ void MainWindow::on_AddFileButton_clicked()
                                                          QDir::homePath(),
                                                          tr("Audio Files (*.mp3 *.flac *.wav)"));
     source.addFile(audioFileName);
+    waveform.create(audioFileName); // For testing
 }
 
 
@@ -208,3 +216,41 @@ void MainWindow::on_AddDirectoryButton_clicked()
     source.HandlePath(audioDirectory);
 }
 
+
+void MainWindow::on_RepeatPlaylistButton_clicked()
+{
+    QString iconColor = "white"; // later just change icon
+    audio.changePlaylistRepeat();
+    if(audio.everythingRepeat){
+        iconColor = "green";
+    }
+    else if(audio.playlistRepeat){
+        iconColor = "blue";
+    }
+    else if(audio.songRepeat){
+        iconColor = "red";
+    }
+
+
+    QString styleSheet = "QPushButton {"
+                         "    background-color: " + iconColor + ";"
+                                       "}";
+    ui->RepeatPlaylistButton->setStyleSheet(styleSheet);
+
+}
+
+void MainWindow::playNextPlaylist(){
+    /*This function is used for helping Audio class to figure out the next playlist available (only when Repeat: Everything is selected)*/
+    QListWidgetItem *nextItem = ui->LibraryListWidget->item(this->uiLibraryPositions[audio.playlistPath] + audio.playlistPosition+3); // Check if the next element for the next playlist (entry) exists in ListLibraryWidget
+    QListWidgetItem *pastItem = ui->LibraryListWidget->item(1); // In case it doesnt start from the start
+    if(nextItem){
+        audio.setPlaylist(source.libraryFiles[nextItem->toolTip()],nextItem->toolTip(), source.getIndexOfItem(nextItem->text(),nextItem->toolTip()));
+        audio.setAudioPath(nextItem->toolTip() + "/" +  nextItem->text());
+    }
+    else{
+        audio.setPlaylist(source.libraryFiles[pastItem->toolTip()],pastItem->toolTip(), source.getIndexOfItem(pastItem->text(),pastItem->toolTip()));
+        audio.setAudioPath(pastItem->toolTip() + "/" +  pastItem->text());
+    }
+    this->updateLibrarySelectedItem();
+    audio.start();
+}

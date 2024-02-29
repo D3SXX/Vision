@@ -23,6 +23,7 @@ void Source::HandlePath(QString path){
     }
     this->libraryPaths.append(path);
     this->libraryFiles[path] = audioFiles;
+    this->updateAmountOfAllItems();
     emit libraryChanged();
 }
 
@@ -38,6 +39,7 @@ void Source::addFile(QString path){
     this->libraryPaths.append(directoryPath);
     QStringList filenameList = {fileName};
     this->libraryFiles[directoryPath] =  filenameList;
+    this->updateAmountOfAllItems();
     emit libraryChanged();
 }
 
@@ -45,4 +47,13 @@ qint16 Source::getIndexOfItem(QString filename,QString directory){
     QStringList files = this->libraryFiles[directory];
     qint16 k = files.indexOf(filename);
     return files.indexOf(filename);
+}
+
+void Source::updateAmountOfAllItems(){
+    quint16 filesAmount = 0;
+    foreach (QString path, this->libraryPaths) {
+        filesAmount += this->libraryFiles[path].size();
+    }
+    this->libraryFilesAmount = filesAmount;
+    this->libraryPathsAmount = this->libraryPaths.size();
 }

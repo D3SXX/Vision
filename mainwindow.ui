@@ -184,124 +184,31 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QTableWidget" name="LibraryStatusTable">
+     <widget class="QLabel" name="LibraryPathsAmountLabel">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>201</width>
-        <height>21</height>
+        <width>100</width>
+        <height>20</height>
        </rect>
       </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+      <property name="text">
+       <string/>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
+     </widget>
+     <widget class="QLabel" name="LibraryFilesAmountLabel">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>0</y>
+        <width>100</width>
+        <height>20</height>
+       </rect>
       </property>
-      <property name="frameShadow">
-       <enum>QFrame::Plain</enum>
+      <property name="text">
+       <string/>
       </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="autoScroll">
-       <bool>true</bool>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="tabKeyNavigation">
-       <bool>false</bool>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="dragDropOverwriteMode">
-       <bool>false</bool>
-      </property>
-      <property name="showGrid">
-       <bool>false</bool>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::NoPen</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-      <property name="cornerButtonEnabled">
-       <bool>true</bool>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderCascadingSectionResizes">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>10</number>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>50</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>39</number>
-      </attribute>
-      <attribute name="verticalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>Dir(s):</string>
-       </property>
-       <property name="font">
-        <font>
-         <kerning>false</kerning>
-        </font>
-       </property>
-       <property name="textAlignment">
-        <set>AlignLeading|AlignVCenter</set>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="textAlignment">
-        <set>AlignLeading|AlignVCenter</set>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>File(s):</string>
-       </property>
-       <property name="textAlignment">
-        <set>AlignLeading|AlignVCenter</set>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="textAlignment">
-        <set>AlignLeading|AlignVCenter</set>
-       </property>
-      </column>
      </widget>
     </widget>
    </widget>
@@ -745,6 +652,9 @@ QSlider::sub-page {
        <width>51</width>
        <height>51</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>

@@ -8,6 +8,7 @@
 #include "mousetrackingslider.h"
 #include "audio.h"
 #include "source.h"
+#include "waveform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +24,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void updateData();
+    QMap<QString, qint16> uiLibraryPositions;
 
 private slots:
 
@@ -52,10 +54,13 @@ private slots:
 
     void on_VolumeLevelSlider_valueChanged(int value);
 
-
     void on_AddFileButton_clicked();
 
     void on_AddDirectoryButton_clicked();
+
+    void on_RepeatPlaylistButton_clicked();
+
+    void playNextPlaylist();
 
 private:
     Ui::MainWindow *ui;

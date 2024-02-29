@@ -60,6 +60,19 @@ void Audio::getMediaInfo(){
     this->codec = player->metaData().stringValue(QMediaMetaData::AudioCodec);
     this->type = player->metaData().stringValue(QMediaMetaData::MediaType); // Check later
 
+    /*If cover art is not embedded it might be located in the directory*/
+    if(this->cover.isNull()){
+        QDir directory(this->playlistPath);
+        QStringList filters;
+        filters << "*.png" << "*.jpg";
+        directory.setNameFilters(filters);
+        QStringList imageFiles = directory.entryList(); // Get every image file
+        if(!imageFiles.isEmpty()){
+            this->cover = QImage(this->playlistPath + "/" + imageFiles[0]);
+        }
+        qDebug() <<"Found Image Art in" + this->playlistPath + "/" + imageFiles[0];
+    }
+
     qDebug() << "Title:" << this->title;
     qDebug() << "Author:" << this->author;
     qDebug() << "Album:" << this->album;
@@ -138,9 +151,41 @@ return true;
 }
 
 bool Audio::increasePlaylistPosition(){
-    if(this->playlistPosition >= playlist.size()-1){
+    if(this->playlistPosition >= playlist.size()-1 || this->songRepeat || this->playlistPosition >= playlist.size()-1 && this->everythingRepeat){
+        if(this->playlistRepeat){
+            this->playlistPosition = 0;
+            return true;
+        }
+        if(this->songRepeat){
+            return true;
+        }
+        if(this->everythingRepeat){
+            emit requestNextPlaylist();
+            return false;
+        }
         return false;
     }
     this->playlistPosition++;
     return true;
+}
+
+void Audio::changePlaylistRepeat(){
+    if(!this->playlistRepeat && !this->songRepeat && !this->everythingRepeat){
+        this->everythingRepeat = true;
+        qDebug() << "Repeat: Everything";
+    }
+    else if(this->everythingRepeat){
+        this->everythingRepeat = false;
+        this->playlistRepeat = true;
+        qDebug() << "Repeat: Playlist";
+    }
+    else if(this->playlistRepeat){
+        this->playlistRepeat = false;
+        this->songRepeat = true;
+        qDebug() << "Repeat: Song";
+    }
+    else if(this->songRepeat){
+        this->songRepeat = false;
+        qDebug() << "Repeat: Disabled";
+    }
 }

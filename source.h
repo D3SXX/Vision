@@ -15,11 +15,16 @@ public:
 
     QMap<QString, QStringList> libraryFiles;
 
+    quint16 libraryFilesAmount;
+    quint16 libraryPathsAmount;
+
 public slots:
 
     void HandlePath(QString path);
 
     void addFile(QString path);
+
+    void updateAmountOfAllItems();
 
     qint16 getIndexOfItem(QString filename,QString directory);
 

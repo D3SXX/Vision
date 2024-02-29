@@ -18,6 +18,7 @@ public:
     void init();
     void start();
     void pause();
+    void changePlaylistRepeat();
     bool onPlay;
     bool isPaused;
 
@@ -37,7 +38,11 @@ public:
     QStringList playlist;
     QString playlistPath;
     qint8 playlistPosition;
+    bool everythingRepeat = false;
     bool playlistRepeat = false;
+    bool songRepeat = false;
+    bool playlistShuffle = false;
+    bool allShuffle = false;
 
 public slots:
     void getMediaInfo();
@@ -57,6 +62,7 @@ signals:
     void positionChanged();
     void volumeChanged();
     void playlistItemChanged();
+    void requestNextPlaylist();
 private:
 
     QMediaPlayer *player;
