@@ -8,6 +8,9 @@ Waveform::Waveform() {
 }
 
 void Waveform::create(QString filepath){
+    if(decoder->isDecoding()){
+        decoder->stop();
+    }
     decoder->setSource(QUrl::fromLocalFile(filepath));
     decoder->start();
 }
@@ -15,17 +18,16 @@ void Waveform::create(QString filepath){
 
 void Waveform::updateProgress()
 {
-    qDebug() << QString("Decoding progress: %1 - %2 (%3)").arg(decoder->position()).arg(decoder->duration()).arg(decoder->isDecoding() ? "Ongoing" : "Paused");
+   // qDebug() << QString("Decoding progress: %1 - %2 (%3)").arg(decoder->position()).arg(decoder->duration()).arg(decoder->isDecoding() ? "Ongoing" : "Paused");
 }
 
 void Waveform::bufferReady(){
     QString outputPath = "/home/d3sx/repositories/C++/Vision/image.png";
-    qDebug() << "Buffer is ready";
+    //qDebug() << "Buffer is ready";
     QAudioBuffer buffer = decoder->read();
     this->format = buffer.format();
     const int width = buffer.frameCount(); // Width of the waveform image
     const int height = 500; // Height of the waveform image
-
     QImage waveformImage(width, height, QImage::Format_RGB32);
     waveformImage.fill(Qt::white);
 
@@ -39,12 +41,7 @@ void Waveform::bufferReady(){
     const int samplesPerPixel = numSamples / width;
 
     const qint64 numBufferSamples = buffer.frameCount();
-    qDebug() << QString("image: %1 duration: %2 | sampleRate: %3 | numSamples: ‰4 SamplePerPixel: ‰5")
-                    .arg(QString("%1x%2").arg(width).arg(height))
-                    .arg(duration)
-                    .arg(sampleRate)
-                    .arg(numSamples)
-                    .arg(samplesPerPixel);
+    //qDebug() << QString("image: %1 duration: %2 | sampleRate: %3 | numSamples: ‰4 SamplePerPixel: ‰5").arg(QString("%1x%2").arg(width).arg(height)).arg(duration).arg(sampleRate).arg(numSamples).arg(samplesPerPixel);
     qint64 xPosition = 1;
     QVector<qreal> peaks;
     qint16 pastValue = 0;
@@ -64,6 +61,6 @@ void Waveform::bufferReady(){
         return;
     }
 
-    qDebug() << "Waveform image saved to:" << outputPath;
+    //qDebug() << "Waveform image saved to:" << outputPath;
 
 }

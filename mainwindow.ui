@@ -491,7 +491,7 @@ background:transparent;
         <rect>
          <x>40</x>
          <y>200</y>
-         <width>81</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -504,12 +504,12 @@ background:transparent;
         <string>Bitrate</string>
        </property>
       </widget>
-      <widget class="QLabel" name="CodecLabel">
+      <widget class="QLabel" name="SampleRateLabel">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>130</x>
          <y>200</y>
-         <width>81</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -519,15 +519,15 @@ background:transparent;
         </font>
        </property>
        <property name="text">
-        <string>Codec</string>
+        <string>Sample Rate</string>
        </property>
       </widget>
-      <widget class="QLabel" name="TypeLabel">
+      <widget class="QLabel" name="BitDepthLabel">
        <property name="geometry">
         <rect>
-         <x>200</x>
+         <x>230</x>
          <y>200</y>
-         <width>81</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -537,7 +537,25 @@ background:transparent;
         </font>
        </property>
        <property name="text">
-        <string>Type</string>
+        <string>Bit Depth</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="ChannelsLabel">
+       <property name="geometry">
+        <rect>
+         <x>320</x>
+         <y>200</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Channels</string>
        </property>
       </widget>
      </widget>

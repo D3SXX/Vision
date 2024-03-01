@@ -50,9 +50,19 @@ void MainWindow::updateData(){
     ui->ArtistLabel->setText(audio.author);
     ui->AlbumTitleLabel->setText(audio.album);
     ui->labelCover->setPixmap(audio.cover.isNull() ? QPixmap(":/V-Cover-Art-dev.png") : QPixmap::fromImage(audio.cover));
-    ui->BitrateLabel->setText(QString("%1 kpbs").arg(audio.bitrate/1000));
-    ui->CodecLabel->setText(audio.codec);
-    ui->TypeLabel->setText(audio.type);
+    if(audio.bitrate){
+        ui->BitrateLabel->setText(QString("%1 kpbs").arg(audio.bitrate/1000));
+    }
+    else{
+        QFileInfo fileInfo(audio.audioPath);
+        qint64 fileSize = fileInfo.size(); // returns size in bytes, need to convert to bits
+        qint16 bitrate = (fileSize * 8)/audio.duration; // convert to bits and divide by song's duration
+        ui->BitrateLabel->setText(QString("%1 kpbs").arg(bitrate));
+        qDebug() << "QMediaPlayer metaData() didn't return bitrate, trying to calculate: " << bitrate;
+    }
+    ui->SampleRateLabel->setText(QString("%1 kHz").arg(waveform.format.sampleRate()));
+    ui->BitDepthLabel->setText(QString("%1-bit").arg(waveform.format.bytesPerSample()*8));
+    ui->ChannelsLabel->setText(QString("%1 Channel(s)").arg(waveform.format.channelCount()));
     ui->CentralBackgroundLabel->setPixmap(audio.cover.isNull() ? QPixmap("") : QPixmap::fromImage(audio.cover));
     QGraphicsBlurEffect *blurEffect = new QGraphicsBlurEffect;
     blurEffect->setBlurRadius(20);
@@ -173,6 +183,7 @@ void MainWindow::on_LibraryListWidget_itemClicked(QListWidgetItem *item)
     }
     audio.setAudioPath(item->toolTip() + "/" +  item->text());
     audio.setPlaylist(source.libraryFiles[item->toolTip()],item->toolTip(), source.getIndexOfItem(item->text(),item->toolTip()));
+    waveform.create(item->toolTip() + "/" +  item->text()); // For testing
     this->togglePlayback(true);
 }
 
@@ -203,7 +214,7 @@ void MainWindow::on_AddFileButton_clicked()
                                                          QDir::homePath(),
                                                          tr("Audio Files (*.mp3 *.flac *.wav)"));
     source.addFile(audioFileName);
-    waveform.create(audioFileName); // For testing
+
 }
 
 
